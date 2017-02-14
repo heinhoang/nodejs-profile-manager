@@ -3,28 +3,28 @@ var nodemon = require('gulp-nodemon');
 var bs = require('browser-sync').create();
 
 // the real stuff
-gulp.task('default', ['browser-sync'], function () {
+gulp.task('default', ['nodemon'], function () {
     gulp.watch('./views/**/*.pug', bs.reload);
     gulp.watch('./public/**/*.js', bs.reload);
     gulp.watch('./public/**/*.css', bs.reload);
-    gulp.watch(['./routes/**/*.js', './app.js', './bin/www'], ['bs-delay']);
+    // gulp.watch(['./routes/**/*.js', './app.js', './bin/www'], ['bs-delay']);
 });
 
 // give nodemon time to restart
-gulp.task('bs-delay', function () {
-    setTimeout(function () {
-        bs.reload({ stream: false });
-    }, 1000);
-});
+// gulp.task('bs-delay', function () {
+//     setTimeout(function () {
+//         bs.reload({ stream: false });
+//     }, 1000);
+// });
 
 // our browser-sync config + nodemon chain
-gulp.task('browser-sync', ['nodemon'], function () {
-    bs.init(null, {
-        port: 4000, // browser-sync run on another port
-        // proxy listen on your existing server (here is expressJS server)
-        proxy: 'localhost:3000'
-    });
-});
+// gulp.task('browser-sync', ['nodemon'], function () {
+//     bs.init(null, {
+//         port: 4000, // browser-sync run on another port
+//         // proxy listen on your existing server (here is expressJS server)
+//         proxy: 'localhost:3000'
+//     });
+// });
 
 // our gulp-nodemon task
 gulp.task('nodemon', function (cb) {
@@ -41,15 +41,25 @@ gulp.task('nodemon', function (cb) {
         //avoid nodemon being started multiple times
         if (!started) {
             cb();
+            bs.init({
+                logLevel: 'debug',
+                logSnippet: false,
+                // proxy listen on your existing server (here is expressJS server)
+                proxy: "localhost:3000",
+                // browser-sync run on another port
+                port: 4000,
+                reloadDelay: 3000,
+                reloadOnRestart: true
+            });
             started = true;
         }
-        bs.reload;
     })
         .on('crash', function () {
             // console.log('nodemon.crash');
         })
         .on('restart', function () {
-            // console.log('nodemon.restart');
+            console.log('browser-sync restart');
+            bs.reload();
         })
         .once('quit', function () {
             // handle ctrl+c without a big weep

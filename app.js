@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 
+const expressValidator = require('express-validator');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const passport = require('passport');
@@ -18,12 +19,10 @@ dotenv.load({ path: '.env' });
 const passportConfig = require('./config/passport');
 const User = require('./models/user');
 
+mongoose.Promise = require('bluebird');
 mongoose.connect(process.env.MONGODB_URI, err => {
   if(err) throw err;
 });
-
-// const index = require('./routes/index');
-// const users = require('./routes/users');
 
 const app = express();
 
@@ -36,6 +35,7 @@ app.set('view engine', 'pug');
 app.use(logger('dev'));
 app.use(flash());
 app.use(bodyParser.json());
+app.use(expressValidator()); // this line must be immediately after any of the bodyParser middlewares!
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(express.static(path.join(__dirname, 'public')));

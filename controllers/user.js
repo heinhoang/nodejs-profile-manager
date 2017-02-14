@@ -2,6 +2,7 @@ const async = require('async');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const passport = require('passport');
+
 const User = require('mongoose').model('User');
 
 /**
@@ -12,7 +13,7 @@ exports.getSignup = (req, res) => {
     if (req.user) {
         return res.redirect('/');
     }
-    res.render('account/signup', {
+    res.render('account/register', {
         title: 'Create Account'
     });
 };
@@ -31,7 +32,7 @@ exports.postSignup = (req, res, next) => {
 
     if (errors) {
         req.flash('errors', errors);
-        return res.redirect('/signup');
+        return res.redirect('/account/register');
     }
 
     const user = new User({
