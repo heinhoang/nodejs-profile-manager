@@ -33,10 +33,9 @@ app.set('view engine', 'pug');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
-app.use(flash());
 app.use(bodyParser.json());
 app.use(expressValidator()); // this line must be immediately after any of the bodyParser middlewares!
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(express.static(path.join(__dirname, 'public')));
 // The session middleware lets us modify req.session
@@ -51,6 +50,14 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
+
+// Give Views/Layouts direct access to session data.
+// must call this AFTER express.session() but BEFORE app.router
+app.use((req, res, next) => {
+  res.locals.user = req.user;
+  next();
+});
 
 // app.use('/', index);
 // app.use('/users', users);

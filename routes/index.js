@@ -1,12 +1,12 @@
 const userController = require('../controllers').user;
-const home = require('./home');
+const homeRouter = require('./home');
 // const users = require('./users');
-const account = require('./account');
+const accountRouter = require('./account');
 
 module.exports = (app) => {
     
-  app.use('/', home);
+  app.use('/', homeRouter);
   // app.use('/users', users);
-  app.use('/account', account);
+  app.use('/', accountRouter);
 
 };

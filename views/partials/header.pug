@@ -1,3 +1,7 @@
+script(type='text/javascript').
+  var data = !{JSON.stringify(user)}
+  console.log(data)
+div
 .navbar.navbar-default
   .container
     .navbar-header
@@ -24,14 +28,14 @@
           li(class=(title == 'Login') ? 'active' : undefined)
             a(href='/login') Login
           li(class=(title == 'Create Account') ? 'active' : undefined)
-            a(href='/signup') Create Account
+            a(href='/register') Create Account
         else
           li.dropdown(class=(title == 'Account Management') ? 'active' : undefined)
             a.dropdown-toggle(href='#', data-toggle='dropdown')
               if user.profile.picture
                 img(src=user.profile.picture)
               else
-                img(src=user.gravatar(60))
+                img(src=user.gravatar)
               span= user.profile.name || user.email || user.id
               i.caret
             ul.dropdown-menu
