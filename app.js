@@ -20,7 +20,7 @@ const passportConfig = require('./config/passport');
 const User = require('./models/user');
 
 mongoose.Promise = require('bluebird');
-mongoose.connect(process.env.MONGODB_URI, err => {
+mongoose.connect(process.env.MONGODB_URI || process.env.MONGOLAB_URI, err => {
   if(err) throw err;
 });
 
